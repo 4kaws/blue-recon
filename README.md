@@ -5,7 +5,7 @@ Fine-tuning **Cosmos-Reason2-2B** on underwater video data to create a specializ
 
 ---
 
-![Pipeline](diagram.png)
+![Pipeline](docs/diagram.png)
 
 ## Quick Start
 
