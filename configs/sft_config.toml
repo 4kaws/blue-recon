@@ -1,0 +1,46 @@
+[model]
+model_name_or_path = "nvidia/Cosmos-Reason2-2B"
+
+[data]
+train_path = "/content/drive/MyDrive/cosmos-cookoff/data/underwater_vqa_train_distilled.json"
+val_path   = "/content/drive/MyDrive/cosmos-cookoff/data/underwater_vqa_val_distilled.json"
+video_dir  = ""   # resolved dynamically via fiftyone at runtime
+n_frames   = 8
+
+[lora]
+r           = 32
+lora_alpha  = 32
+target_modules = [
+    "q_proj", "k_proj", "v_proj", "o_proj",
+    "gate_proj", "up_proj", "down_proj"
+]
+lora_dropout = 0.05
+bias         = "none"
+task_type    = "CAUSAL_LM"
+
+[quantization]
+load_in_4bit          = true
+bnb_4bit_quant_type   = "nf4"
+bnb_4bit_compute_dtype = "float16"
+bnb_4bit_use_double_quant = true
+
+[training]
+num_train_epochs              = 3
+per_device_train_batch_size   = 1
+gradient_accumulation_steps   = 4
+learning_rate                 = 2e-4
+lr_scheduler_type             = "cosine"
+warmup_ratio                  = 0.03
+weight_decay                  = 0.001
+max_seq_length                = 2048
+bf16                          = false
+fp16                          = true
+dataloader_num_workers        = 2
+save_steps                    = 20
+logging_steps                 = 5
+output_dir                    = "/content/drive/MyDrive/cosmos-cookoff/outputs/checkpoints"
+final_model_dir               = "/content/drive/MyDrive/cosmos-cookoff/outputs/final_model_distilled"
+
+[vision]
+min_pixels = 200704   # 256 * 28 * 28
+max_pixels = 401408   # 512 * 28 * 28
